@@ -435,18 +435,7 @@ WAone<BasicTurbulenceModel>::WAone
             0.02
         )
     ),
-    /*
-    chi2_
-    (
-        dimensioned<scalar>::lookupOrAddToDict
-        (
-            "chi2",
-            this->coeffDict_,
-            50.0
-        )
-    ),
-    
-*/
+
     Tu_
     (
         dimensioned<scalar>::lookupOrAddToDict
@@ -724,36 +713,13 @@ void WAone<BasicTurbulenceModel>::correct()
 	const volScalarField Rev(this->Rev(W));
     const volScalarField Retheta(this->Retheta(Rev));
 
-	//volScalarField nuBC = this->nut_/(mag(this->U_)*y_);
-	
-
-	volScalarField nuBC = Rnu_/(mag(this->U_)*y_);
-	//nuBCm_ = nuBC;
-	volScalarField Term2 = nuBC;
-
-	forAll(nuBC, cellI)
-{
-	//nuBC[cellI] = (0.3*Rnu_[cellI])/(S[cellI]*sqr(y_[cellI]));
-	nuBC[cellI] = (CP2_.value()*Rnu_[cellI])/(S[cellI]*sqr(y_[cellI]));
-	//Term2[cellI] = max(nuBC[cellI]-0.0005,0.0)/0.0005;
-}
-	nuBCm_=nuBC;
 	term2m_= max(tm_*this->nut_/this->nu(),0.0);
-	
-	term1m_ = max(CP1_*Retheta-RethetaC_,0.0)/(chi1_*RethetaC_); //2.5
-	
-	gamma_ = 1.0-exp(-sqrt(Ct1_*term1m_)-sqrt(term2m_)); //0.01term1
-	
-	
+	term1m_ = max(CP1_*Retheta-RethetaC_,0.0)/(chi1_*RethetaC_);
+	gamma_ = 1.0-exp(-sqrt(term1m_)-sqrt(term2m_));
     gamma_=min(gamma_,scalar(1.0));
     bound(gamma_,scalar(0));
     eddyViscosity<RASModel<BasicTurbulenceModel> >::correct();
-  //////////transitionBC local reference
-   
 
-    
-   
-	
 	
 	chi2m_ = this->nut_/this->nu();
 	Rethetam_ = Retheta;
@@ -775,9 +741,6 @@ void WAone<BasicTurbulenceModel>::correct()
       + alpha*rho*f1_*C2kw_*fvm::Sp((fvc::grad(Rnu_)&fvc::grad(S))/S, Rnu_)
       - alpha*rho*(1.0-f1_)*min(C2ke_*Rnu_*Rnu_*magSqr(fvc::grad(S))/S2,
                                 Cm_*magSqr(fvc::grad(Rnu_)))
-    
-                              
-                             
     );
 
 
