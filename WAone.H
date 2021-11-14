@@ -105,11 +105,9 @@ protected:
 			volScalarField gamma_;
 			volScalarField term1m_;
 			volScalarField term2m_;
-			volScalarField nuBCm_;
 			volScalarField chi2m_;
 			volScalarField Rethetam_;
             dimensionedScalar tm_;
-            volScalarField plim_;
             dimensionedScalar Ct1_;
             dimensionedScalar CP1_;
             dimensionedScalar CP2_;
