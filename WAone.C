@@ -761,7 +761,6 @@ void WAone<BasicTurbulenceModel>::correct()
 
     // Calculate switch function (f1)
     f1_ = calcSwitch(S, W);
-    plim_ = 0.5*max(gamma_-0.2, 0.0)*(1.0-gamma_)*min(max((Rev/2420.0)-1.0, 0.0), 3.0)*max(3.0*this->nu()-this->nut_, dimensionedScalar("0", dimensionSet(0, 2, -1, 0, 0), 0))*W;
 
     eddyViscosity<RASModel<BasicTurbulenceModel> >::correct();
 
