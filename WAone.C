@@ -79,7 +79,6 @@ tmp<volScalarField> WAone<BasicTurbulenceModel>::WDF_k
 ) const
 {
     return this->nut_*omega;
-	//return Rnu_*omega;
 }
 
 template<class BasicTurbulenceModel>
@@ -143,7 +142,6 @@ tmp<volScalarField> WAone<BasicTurbulenceModel>::Rev
 ) const
 {
    return this->rho_*sqr(y_)*W/this->mu();
-   //return this->rho_*sqr(y_)*S/this->mu();
 }
 
 template<class BasicTurbulenceModel>
@@ -714,7 +712,7 @@ void WAone<BasicTurbulenceModel>::correct()
     const volScalarField Retheta(this->Retheta(Rev));
 
 	term2m_= max(tm_*this->nut_/this->nu(),0.0);
-	term1m_ = max(CP1_*Retheta-RethetaC_,0.0)/(chi1_*RethetaC_);
+	term1m_ = max(1.2*Retheta-RethetaC_,0.0)/(chi1_*RethetaC_);
 	gamma_ = 1.0-exp(-sqrt(term1m_)-sqrt(term2m_));
     gamma_=min(gamma_,scalar(1.0));
     bound(gamma_,scalar(0));
